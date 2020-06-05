@@ -27,7 +27,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect(`${MONGO}`, {
+mongoose.connect(MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
