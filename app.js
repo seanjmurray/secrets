@@ -10,7 +10,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 const app = express();
-
+const MONGO = process.env.MONGODB;
+const PORT = process.env.PORT;
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
@@ -26,7 +27,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/userDB", {
+mongoose.connect(`${MONGO}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -58,7 +59,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/secrets",
+    callbackURL: "https://sean-secret.herokuapp.com//auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -165,6 +166,6 @@ app.route("/register")
 
 
 
-app.listen(3000, function() {
-  console.log("Server started on port 3000.");
+app.listen(PORT, function() {
+  console.log(`Server started on port ${PORT}.`);
 });
